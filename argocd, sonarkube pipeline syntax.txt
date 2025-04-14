@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "ajjurathod1998/anisha"
+        GIT_REPO_NAME = "argocd-project-new"
+        GIT_USER_NAME = "ajjurathod"
+        DEPLOYMENT_FILE = "java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml"
+    }
+
+    stages {
+        stage('Code Checkout') {
+            steps {
+                git branch: 'main', url: "https://github.com/ajjurathod/argocd-project-new.git"
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
+           
+            }
+        }
+
+        stage('Static Code Analysis') {
+      environment {
+        SONAR_URL = "http://34.201.116.83:9000"
+      }
+      steps {
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+          sh 'mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+        }
+      }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .'
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                        docker push ${IMAGE_NAME}:${BUILD_NUMBER}
+                    '''
+                }
+            }
+        }
+
+        stage('Update Deployment File') {
+            steps {
+                withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        git config user.email "ajjurathod1998@gmail.com"
+                        git config user.name "ajjurathod"
+                        
+                        # Replace image tag in deployment file
+                        sed -i "s|replaceImageTag|${BUILD_NUMBER}|" ${DEPLOYMENT_FILE}
+
+                        git add ${DEPLOYMENT_FILE}
+                        git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                    '''
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+---
+- hosts: test
+  become: yes
+  tasks:
+    - name: update
+      command: apt update -y
+    - name: install docker
+      command: apt install docker.io -y
+      notify: restart docker
+  handlers:
+    - name: restart docker
+      command: systemctl restart docker

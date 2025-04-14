@@ -1,0 +1,26 @@
+ansible all --list-hosts  == to list all server
+ansible <group-name> --list-hosts  == to list server of that  group
+ansible group-name[0] --list-hosts  ==  to get the details of 1st server
+ansible group-name[1] --list-hosts   == to get the details of 2nd server
+ansible group-name[-1] --list-hosts   ==to get the details of last server
+ansible group-name1:group-name2 --list-hosts  == to list all servers of different group
+
+ad-hoc commadns == used to perform simple task using linuc commands
+ansible all -b -a "apt install git"  == installs git  on all server
+ansible all -b -a "touch file1"       (-b == EQUIVALENT TO SUDO ,gives us sudo previleges)(-a == argument)
+ansible <group-name>[0] -a "touch file2" == it will create a file2 in 1st server of that perticular group
+
+modules
+ansible all  -b -m apt -a  "pkg=git  state=present"  == installs git  on all server
+ansible all -b -m apt -a "pkg=git  state=absent"  == to remove got from all the server
+ansible all -b -m user -a  "name=ajay"
+ansible all -b -m copy -a "source=file1  dest=/tmp"
+
+ansible-playbook play-book.yml == to run ansible plyabook
+ansible-playbook file1.yml --syntax-check  ==to check wheather playbook is correctly formatted or not (dry run
+ansible-playbook play-book.yml  --check == to check wheather playbook is correctly formatted or not (dry run)
+
+ansible-vault create file-name.yaml == to create encrypted file 
+ansible-vault edit file-name.yaml  == to edit encrypted file 
+ansible-vault rekey file-name.yaml == to rekey encrypted file 
+ansible-vault encrypt file-name.yaml == to encrypted existing  file 

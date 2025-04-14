@@ -1,0 +1,9 @@
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl expose svc argocd-server --name=argocd-server-np --type=NodePort --port=80 --target-port=8080 -n argocd
+kubectl get svc argocd-server-np -n argocd
+
+
+## to get password to login
+kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode
+

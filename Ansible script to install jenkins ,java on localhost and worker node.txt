@@ -1,0 +1,50 @@
+# To install jenkins, java adn docker  on main (localhost) server using ansible script
+
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: install jenkins and java
+      script: jenkins.sh
+    - name: instal docker
+      command:  sudo apt install docker.io -y
+
+## write jenkins.sh file as mentioned in above script
+
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+sudo apt install openjdk-17-jdk -y
+
+
+
+## To install java , jenkins , docker on localhost and install docker and java on worker node using same ansible script
+
+---
+- hosts: localhost    #localhost == it will install software where ansible is running
+  become: yes
+  tasks:
+    - name: install java
+      script: jenkins.sh
+    - name: instal docker
+      command:  sudo apt install docker.io -y
+
+
+- hosts: test
+  become: yes
+  tasks:
+     - name: install docker
+       command:  sudo apt install docker.io -y
+     - name:  install java
+       command: sudo apt install openjdk-17-jre -y
+- hosts: prod
+  become: yes
+  tasks:
+     - name: install docker
+       command:  sudo apt install docker.io -y
+     - name:  install java
+       command: sudo apt install openjdk-17-jre -y
