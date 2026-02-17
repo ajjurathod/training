@@ -1,0 +1,73 @@
+git clone https://github.com/aeimer/java-example-helloworld-war.git  
+
+
+sudo apt update
+sudo apt install default-jdk -y
+sudo mkdir -p /opt/tomcat
+sudo groupadd tomcat
+sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.88/bin/apache-tomcat-8.5.88.tar.gz
+sudo tar xzvf apache-tomcat-8.5.88.tar.gz -C /opt/tomcat --strip-components=1
+sudo chown -RH tomcat: /opt/tomcat
+sudo sh -c 'chmod +x /opt/tomcat/bin/*.sh'
+sudo update-java-alternatives -l
+sudo nano /etc/systemd/system/tomcat.service
+
+
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=network.target
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+Environment="JAVA_HOME=/usr/lib/jvm/java-1.21.0-openjdk-amd64"
+Environment="CATALINA_BASE=/opt/tomcat"
+Environment="CATALINA_HOME=/opt/tomcat"
+Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true"
+Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+[Install]
+WantedBy=multi-user.target
+
+
+
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl enable tomcat
+
+sudo vi /opt/tomcat/conf/tomcat-users.xml
+
+<tomcat-users>
+  <role rolename="manager-gui"/>
+  <user username="tomcatmgr" password="tomcatmgr" roles="manager-gui"/>
+</tomcat-users>
+
+
+sudo systemctl restart tomcat
+
+
+cd /opt/tomcat/conf/Catalina/localhost
+
+nano manager.xml
+
+
+<Context privileged="true" antiResourceLocking="false"
+        docBase="${catalina.home}/webapps/manager">
+<Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />
+</Context>
+
+
+
+
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl enable tomcat
+
+cp warfile /opt/tomcat/webapps
+
+
+
+

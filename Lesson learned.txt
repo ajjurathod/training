@@ -1,0 +1,102 @@
+ Lesson : Glue Job Failures Due to Missing IAM Permissions
+                                                                                            
+Issue Faced: AWS Glue jobs were failing intermittently with access denied errors.                             Root Cause :     IAM role attached to Glue lacked fine-grained S3 permissions on specific buckets (S3-B, S3-C). Lesson Learned:     Always use the principle of least privilege, but ensure necessary actions (`s3:GetObject`, `PutObject`, `ListBucket`) are covered for all target buckets.
+Action Taken: Created a Glue-specific IAM policy template and validated with `IAM Access Analyzer`.                                                                    
+Lesson 2: Replication to Region 2 Failing Without Notification
+Issue faced: Cross-region S3 replication (Region 1 to Region 2) failed silently without notifocation
+Lesson learned: Always Set up CloudWatch + EventBridge alerts for replication failures.
+Action taken: Configured cloudwatch and eventbridge for cross regional notification
+
+Lesson 3 :No Automated Alerting for Glue/Lambda/Athena Failures	
+Issue Faced: Failures in data pipeline components (Glue jobs, Lambda errors) weren’t noticed until customers reported.
+Root Cause: No CloudWatch alarms or centralized logging/alerting was configured.                                Lesson Learned: Always configure CloudWatch alarms + EventBridge + SNS notifications for key ETL components.    Action Taken: Alarms and notification pipelines added to all critical services. 
+
+Lesson 4: CloudTrail Was Enabled But Not Logging S3 Data Events
+Issue faced: CloudTrail was logging only management events, and not capturing S3 data-level activity  (e.g., GetObject, PutObject) 
+Root cause: CloudTrail was configured only for management events, not data events, which are off by default for S3.
+lesson learned: Always configure data event logging for critical S3 buckets to track fine-grained object-level activity
+action taken: Updated CloudTrail configuration to include data events for all ETL-related S3 buckets
+
+Issue Faced	Lifecycle policies not correctly configured, causing increased storage cost
+Root Cause	The team missed applying cost-saving Glacier transition rules during deployment
+Lesson Learned	Standardize lifecycle policies as part of baseline S3 setup
+Action Taken	Updated internal checklist and CloudFormation templates to include default lifecycle policies
+
+
+Lesson : Unexpected EBS Snapshot Costs Due to Frequent DLM Execution
+
+Issue Faced	Backup costs spiked due to overly aggressive Amazon Data Lifecycle Manager (DLM) snapshot schedule.
+Root Cause	Snapshot frequency was set to every hour for large EBS volumes, even during idle periods.
+Lesson Learned	Tune DLM policies based on usage patterns; non-production environments don’t need frequent snapshots.
+Action Taken	Revised snapshot frequency to daily; added tagging strategy to differentiate prod/dev and apply                separate DLM policies.
+Impact	       Reduced snapshot storage costs by 40%; cleaner backup management. 
+
+
+Lesson : Unused EBS Snapshots Accumulated Over Time
+Aspect	Details
+Issue Faced	A significant portion of monthly cost was due to unused EBS snapshots that were no longer relevant.
+Root Cause	Snapshots were created via automation but not regularly audited or deleted.
+Lesson Learned	Implement periodic review and automation for snapshot retention using AWS Backup or lifecycle scripts.
+Action Taken	Scheduled cleanup scripts to delete snapshots older than retention policy, and adopted AWS Backup.
+Impact	Reduced EBS snapshot costs and maintained better compliance with data retention policies.
+
+
+
+ Lesson : No Data Encryption Logging Enabled for Compliance
+
+Issue Faced	Customer security audit flagged lack of logging for encryption and KMS usage on S3 and EBS.
+Root Cause	CloudTrail was enabled, but data events for S3 and EBS encryption actions weren’t being logged.
+Lesson Learned	Enable full data event logging in CloudTrail for all storage services with KMS integration.
+Action Taken	Updated CloudTrail config to include S3 data events and EBS volume-level encryption logging.
+Impact	Passed compliance audit; strengthened traceability and governance across regions.  
+
+
+ Lesson  Unstructured S3 Bucket Naming Made Management Harder
+
+Issue Faced	Hard to manage and monitor S3 buckets due to inconsistent naming and tagging.
+Root Cause	No enforced bucket naming standard across deployments.
+Lesson Learned	Enforce naming convention (e.g., client-name-env-purpose-region) and tagging (e.g., cost center, team, compliance level).
+Action Taken	Added automated naming convention enforcement and cost allocation tags to IaC templates.
+Impact	Easier cost allocation, improved governance, simpler monitoring and reporting. 
+
+Lesson : No Cost Visibility for Glacier and Instant Retrieval Classes
+Aspect	Details
+Issue Faced	S3 Glacier and Instant Retrieval storage tiers were used, but costs were not broken down clearly for the customer.
+Root Cause	Lack of cost allocation tags and storage class filters in Cost Explorer.
+Lesson Learned	Apply cost allocation tags and separate reporting for each S3 storage class.
+Action Taken	Implemented detailed tagging and trained customer to use AWS Cost Explorer filters.
+Impact	Improved transparency with customers, enabled accurate billing and budgeting.
+
+EXLL-036 - Cost Budget Alert Not Configured
+One environment exceeded monthly AWS budget due to large EBS snapshot growth, but no alerts were triggered.
+Lesson Learned: Always configure AWS Budgets with email/SNS alerts, and monitor snapshot growth using AWS Cost Explorer & Trusted Advisor.  
+
+Lesson 10: Missing Tagging on S3 Buckets Caused Tracking Issues
+Issue Faced: Unable to track S3 storage costs accurately by project or environment.
+Lesson Learned: Apply mandatory resource tagging policy across S3 buckets and storage classes.
+Action Taken: Enforced tagging at bucket creation through SCP + Organization Tag Policies. Added billing alerts by tag. 
+
+
+Hello Satya,
+
+Please find below status report of  6th August.
+S.no1 	Work description 	Status
+
+
+1
+
+
+2
+
+	Aws storage competency
+Task: 
+EXLL-001 - Lessons Learned
+
+
+EXBKP-001 - Process to determine customer needs
+	
+
+Under-review
+
+
+On-going                     

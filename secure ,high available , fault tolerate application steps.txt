@@ -1,0 +1,23 @@
+To build a high available fault tolerate scalable and secure
+
+1 create vpc along with public subnet and private subnet amd host the application in private subnet by enterning into 
+public subnet and take ssh into private subnet 
+
+2 create target group and attach private subnet's instance 
+
+3 create load balancer using above target group
+  see whether the application is running or not using dns name of load balancer
+
+4 now create image of private subnet's instance 
+
+5 create ASG 
+
+ in launch template use image of private subnet's instance
+
+create asg 
+ that's it 
+
+
+CREATE USER 'wp_user'@'database-1.cgkf5qiqs0zz.us-east-2.rds.amazonaws.com' IDENTIFIED BY 'Ajay1234';
+GRANT ALL PRIVILEGES ON db1.* TO 'wp_user'@'database-1.cgkf5qiqs0zz.us-east-2.rds.amazonaws.com';
+

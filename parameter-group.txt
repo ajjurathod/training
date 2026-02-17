@@ -1,0 +1,41 @@
+## in parameter group allow this settings
+
+rds.custom_dns_resolution=1
+enforce_gtid_consistency=on
+rds.group_replication_enabled=1
+## BY command SELECT UUID();  on  one database enough. no matter how many database you have.
+group_replication_group_name=52ff010a-4069-11f0-b193-02f9cc4b5d31   ## BY command SELECT UUID();
+gtid-mode=ON
+## configure all database endpoint in SEED
+group_replication_group_seeds=database-1.cgkf5qiqs0zz.us-east-2.rds.amazonaws.com:3306,database2.cgkf5qiqs0zz.us-east-2.rds.amazonaws.com:3306
+group_replication_start_on_boot=1
+slave_preserve_commit_order=1
+binlog_format-ROW
+##Attach the  same parameter group to all the database.
+  
+#Now
+## login into all the database instance and set this possword for rdsgrprepladmin use
+CALL mysql.rds_group_replication_create_user('MySecurePassword123!');
+CALL mysql.rds_group_replication_set_recovery_channel('MySecurePassword123!');
+
+
+## run this foolwing coomand on database1 (could be any )
+call mysql.rds_set_configuration('binlog retention hours', 168); -- 7 days binlog
+call mysql.rds_group_replication_create_user('MySecurePassword123!');
+call mysql.rds_group_replication_set_recovery_channel('MySecurePassword123!');
+call mysql.rds_group_replication_start(1);
+
+## run this command on another databsae or databases
+call mysql.rds_set_configuration('binlog retention hours', 168); -- 7 days binlog
+call mysql.rds_group_replication_create_user('MySecurePassword123!');
+call mysql.rds_group_replication_set_recovery_channel('MySecurePassword123!');
+call mysql.rds_group_replication_start(0);
+
+## to see it is correctly configured or not
+SELECT * FROM performance_schema.replication_group_members;
+
+CREATE DATABASE active;
+use active;
+create table active_active(id  INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), phone_number VARCHAR(20)  );
+INSERT INTO active_active(name,phone_number) VALUES ('ajay','7349181246'),('yash','9950234560'),('vamsi','9900000000');
+

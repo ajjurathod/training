@@ -1,0 +1,29 @@
+kubectl get pods == to list all the pods
+kubectl describe pod <pod-name> == to get details of the pods
+kubectl get pods --show-labels == to list the pods along with lables
+kubectl label pod <pod-name> key=valve == to lable existing pods 
+kubectl label pod <pod-name> <label-key>-    == this will remove the pod label  (- it removes)
+kubectl get pods -l key=valve == to list the pods with label name
+kubetcl scale --replicas=<4> object/object-name == to scale up and scale down
+kubetcl scale --replicas=<4> deployment/<deployment-name>  == to scale up and scale down
+kubectl label node <node-name> node-role.kubernetes.io/worker=worker  == to rename worker name 
+kubectl get pod  <pod-name> -o wide == to get details of pod
+kubectl get nodes <node-name> -o wide  == to get details of node
+kubectl exec -it  <pod-name> -c test-container -- bash  ==  to enter inside conatiner
+kubectl taint nodes <ip of node> key=<worker2>:NoSchedule it will not schedule pod to this perticular node
+kubectl taint nodes <ip of node> key=<worker2>:NoExecute  == it will not execute the pods 
+kubectl taint nodes ip-172-31-12-173 key=worker2:NoSchedule-    == it will remove the taint   (- this removes taint)
+kubectl describe node <node-name> | grep Taints  == to see wheather a perticular node is tainted or not
+kubectl cordon <node-name>  == it will make sure that no new will be assigned but existing pod  will continue to run 
+kubectl uncordon <node-name> == undo cordon 
+cd .kube == location of config file
+
+kubectl get ingress  == to see the ingress controller running or not
+kubectl edit svc <nginx-ingress-ingress-nginx-controller> == to edit (hear we need to loadbalancer to NODEPORT to access application)
+kubectl get svc <ingress-service-controller> == it will give details of ingress control like nodeport range etc
+
+kubectl create namespace <my-namespace> == to create namespace
+kubectl get pods -n <my-namespace> == to get pods of perticular name-space
+
+
+

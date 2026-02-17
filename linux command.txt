@@ -1,0 +1,5 @@
+adduser < user-name>   == it will create a user with home directory by default ,ask Set password Assign default groups, not add the user to the sudo group unless you explicitly do it.
+
+useradd <user-name>  == it will create a user without home directory, not ask password and no root user previleges ( less inteactive)
+
+groups <user-name>  == to see in which group user is presnt

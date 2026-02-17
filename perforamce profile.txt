@@ -1,0 +1,92 @@
+take screenshot of Cloudwatch metrics of ebs and s3 to prove the why we choose rpo and rto 
+basically for rpo 15 minutes and RTO 60 minutes what should be clouwatch metrics 
+
+that much increase  the readings of cloudwatch metrics 
+
+
+We collaborated with  heatlcare customer team to gather detailed information about their backup and restore objectives
+data source  IBM whatssn ad onprem
+data size 10gg/per day
+data type = zip with .csv file
+is it a batch or live data = batch
+
+backup and restore process below past tense guidence
+
+Workload Identification & Tiering
+Conducted stakeholder workshops to map all workloads that require backup, noting:
+Data source type (database, application, file system).
+Backup frequency and retention policy.
+Restore urgency and business criticality.
+Classified workloads into performance tiers:
+Tier 1 – Mission Critical: Requires the fastest restore and minimal data loss.
+
+Tier 2 – Business Essential: Moderate restore speed, longer RPO acceptable.
+
+Tier 3 – Archival: Low restore urgency, long-term retention.
+
+2. CloudWatch Monitoring Setup
+Enabled Amazon CloudWatch metrics for all relevant resources:
+Enable/collect the following CloudWatch metrics for each backup workload:
+EBS: I/O operation metrics and throughput metrics.
+
+
+EBS Volumes: Monitored VolumeReadOps, VolumeWriteOps, VolumeReadBytes, VolumeWriteBytes, and VolumeIdleTime.
+S3: bytes transferred, request counts, and object-level latency metrics.
+S3 Buckets: Monitored BytesDownloaded, BytesUploaded, FirstByteLatency, and transfer request counts.
+Network Performance: Monitored EC2 NetworkIn and NetworkOut to detect bandwidth constraints during transfers.
+
+
+
+Applied lifecycle policies to move data between S3 storage classes without impacting recovery performance for active data.
+Amazon Data Lifecycle Manager (DLM) for automated EBS snapshot backups
+Ensures point-in-time recovery of EC2 workloads in the private subnet.
+Automates snapshot scheduling so backups happen within the RPO window.
+Provides quick restore capabilities to meet RTO for compute workloads.
+
+EBS + Amazon Data Lifecycle Manager (DLM)
+DLM automates scheduled EBS snapshots for EC2-backed workloads (private subnet). Snapshots provide point-in-time recovery for compute workloads, enabling restores within the RTO window defined by the customer SLA.
+Snapshot lifecycle policy ensures retention and deletion rules which support RPO (how far back restores must be possible) and compliance retention requirements.
+
+Amazon S3 Lifecycle Policies
+Moves backup data from S3 Standard to cost-optimized storage tiers like S3 Intelligent-Tiering and then to S3 Glacier Instant Retrieval for less frequent access.
+Ensures older backups are still available for restore within compliance requirements.
+Cross-Region Replication (CRR) for S3 Buckets
+Replicates critical backup data to a second AWS Region.
+Provides disaster recovery capability in case of a Region-wide failure.
+Supports business continuity by ensuring restore operations can still meet RTO even if the primary Region is unavailable.
+
+
+S3 + Lifecycle Policies + Cross-Region Replication (CRR)
+Active backup objects are stored in S3 (S3 Standard / Intelligent tiering as per access profile) and lifecycle policies automatically transition objects to lower-cost tiers for long-term retention. This maintains availability of recent backups while controlling cost for archival data.
+CRR replicates critical backup buckets to a second AWS Region to provide a region-failure DR capability, preserving recoverability and enabling restoration from the replica to meet RTO when the primary Region is unavailable.
+
+DLM ensures consistent, automated point-in-time snapshots for rapid EBS restores (supporting short RTOs for EC2 workloads).
+S3 lifecycle policies ensure frequently required backups remain on performant storage for recovery and then transition to lower-cost tiers for long-term retention without losing recoverability required by the RPO.
+CRR guarantees a secondary geographic copy that can be used if the primary Region is unavailable, preserving recoverability and continuity for RTO in the event of regional failure.
+
+EBS Backup Strategy:
+Configured Amazon Data Lifecycle Manager (DLM) to automate periodic EBS snapshots for critical EC2 instances.
+Snapshots are stored in the same region for rapid restore and replicated to a secondary region for disaster recovery.
+Volume type selection (gp3) ensures predictable IOPS and throughput to meet recovery time targets.
+
+S3 Data Protection & Recovery:
+Applied S3 Lifecycle Policies for automated transitions between storage classes to balance cost and retrieval speed.
+Configured Cross-Region Replication (CRR) to replicate critical backup data to a secondary AWS region.
+Leveraged S3 Glacier Instant Retrieval for archived data that must be restored within minutes.
+
+
+CloudWatch Monitoring & Alerts
+CloudWatch captures IOPS/throughput/latency metrics for EBS and S3, backup job durations, snapshot creation success/failure, and replication status. Alarms notify operators if observed performance or job completion deviates from SLA-defined thresholds, enabling rapid remediation before RTO/RPO are breached.
+
+Continuous Monitoring & Improvement
+Set CloudWatch Alarms to trigger when:
+Throughput drops below a threshold that risks missing RTO.
+IOPS fall below required levels during restore.
+Scheduled quarterly performance reviews to:
+Assess impact of workload growth on backup and restore performance.
+Adjust storage class selection, EBS configurations, or network settings.
+Maintained a performance profile history in CloudWatch for audit and compliance evidence.
+
+
+We implemented an automated backup and recovery performance profile that uses CloudWatch to measure IOPS, throughput and latency for EBS and S3 operations, and uses DLM snapshots, S3 lifecycle transitions and cross-region replication to ensure the backup architecture meets customer RPO and RTO objectives.
+

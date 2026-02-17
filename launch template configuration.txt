@@ -1,0 +1,54 @@
+#To configure instaance in asg in kubernetes master node
+# create a new instance and install this
+#!/bin/bash
+set -e
+
+# Disable swap
+swapoff -a
+sed -i '/ swap / s/^/#/' /etc/fstab
+
+# Update packages and install dependencies
+apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+
+# Add Kubernetes APT repository (Updated)
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list
+
+# Install Kubernetes tools
+apt-get update
+apt-get install -y kubelet kubeadm kubectl containerd
+apt-mark hold kubelet kubeadm kubectl
+
+
+# create a image of this instance and use for launch template
+
+## in lauch template use this commands in userdata
+
+#!/bin/bash
+# Turn off swap
+swapoff -a
+sed -i '/ swap / s/^/#/' /etc/fstab
+
+# Enable IP forwarding (required by Kubernetes)
+sysctl -w net.ipv4.ip_forward=1
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+
+# Reset if needed
+kubeadm reset -f
+rm -rf /etc/cni/net.d/*
+rm -rf /run/flannel
+
+# Wait for cleanup
+sleep 5
+
+# Join the cluster change to your kubeadm
+kubeadm join 10.0.1.50:6443 --token zqn7wy.87t7yi308qfi5rbu \
+  --discovery-token-ca-cert-hash sha256:3b870c995551ef56f940f9ecd8661270e2351a55a5b9bb4bebe4082e26ebc58a \
+  --v=5
+
+
+
+
+## run this in master node so that pods will deploy automattically on new node
+kubectl apply -f https://raw.githubusercontent.com/aws/aws-node-termination-handler/main/config/eks/aws-node-termination-handler-ds.yaml

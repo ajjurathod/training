@@ -1,0 +1,40 @@
+# Download and install Trivy (for Ubuntu/Debian-based systems)
+curl -sfL https://github.com/aquasecurity/trivy/releases/download/v0.31.0/trivy_0.31.0_Linux-64bit.deb -o trivy.deb
+sudo dpkg -i trivy.deb
+
+trivy --version
+
+#to install sonarqube and give path to jenkins 
+# Install unzip if missing
+sudo apt update
+sudo apt install -y unzip
+
+# Download the latest Sonar Scanner (adjust URL if you want a newer version)
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+
+# Extract to /opt
+sudo unzip sonar-scanner-cli-5.0.1.3006-linux.zip -d /opt
+
+# Create symlink
+sudo ln -s /opt/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+# Verify
+sonar-scanner --version
+
+# Install Docker
+apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io
+usermod -aG docker ubuntu
+systemctl enable docker
+systemctl start docker
+
+
+
+
+
+sh 'trivy fs --exit-code 1 --vuln-type library --severity HIGH,CRITICAL .'

@@ -1,0 +1,58 @@
+To install and access wordpress site
+
+Create RDS my-sql and launch instance using same Security group 
+sudo apt update
+
+sudo apt install apache2
+
+sudo apt install mysql-server -y
+sudo systemctl start mysql.service
+apt-get install mysql-client -y
+sudo apt install php libapache2-mod-php php-mysql php-cli php-curl php-gd php-mbstring php-xml php-xmlrpc
+
+sudo nano /var/www/html/info.php
+
+add this content to info.php file 
+<?php
+phpinfo();
+?>
+Save and exit the file, then access http://your_server_ip/info.php in your web browser. You should see the PHP information page.
+
+enter inside database
+mysql -h <endpoint of rds> -u admin -p
+enter password
+use <database name>;
+
+CREATE USER 'wp_user'@'%' IDENTIFIED BY 'Ajay1234';   ==> this will crete user (% allow wordpress site access from IP)
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wp_user'@'%';
+FLUSH PRIVILEGES;
+exit
+
+
+cd /tmp
+wget https://wordpress.org/latest.tar.gz
+tar -xvf latest.tar.gz
+sudo mv wordpress/* /var/www/html/
+
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+cd /var/www/html/
+sudo mv wp-config-sample.php wp-config.php
+
+sudo nano wp-config.php   ==> add following content
+define( 'DB_NAME', 'wordpress' );
+/** Database username */
+define( 'DB_USER', 'wp_user' );
+/** Database password */
+define( 'DB_PASSWORD', 'Ajay1234' );
+/** Database hostname */
+define( 'DB_HOST', 'database-1.cgkf5qiqs0zz.us-east-2.rds.amazonaws.com' );  ==> in hear add RDS end point as your Host name
+
+systemctl restart apache2 
+
+that's it and access website using public ip of instance
+
+
+ 
+

@@ -1,0 +1,430 @@
+FAWS BEDRock
+It is a aws service that lets us build and scale generative AI application using foundation models (FMs) without needing to manage infrastructure or train your own models.
+What Can You Do With Bedrock?
+You can build apps that:
+Chat or answer questions (chatbots, support bots)
+Summarize documents (PDFs, reports, emails)
+Generate text (blogs, marketing copy, emails)
+Classify data (sort emails, reviews, support tickets)
+Translate or rewrite text
+Generate images (like using Stability AI’s models)
+
+
+
+AWS sagemaker
+Amazon SageMaker is a fully managed AWS service that lets you build, train, and deploy,  machine learning (ML) models at scale without managing servers.
+Just like jenkins in devops 
+
+AWS quiksight
+It is aws service that lets us visulize data and genetate dashboards (just like power BI tool ( grafana))
+to create interactive dashboards
+
+Aws config
+It is aws service that lets us to track and keep records of configuration change of aws resources.
+Think of AWS Config as a security camera for your AWS environment.
+It takes a snapshot of your resources (like EC2, S3, IAM, Security Groups, etc.) and keeps track of:
+What resources exist
+How they are configured
+When and how they change
+Whether they follow your organization’s rules (compliance)
+
+Aws storage Gateway
+It is hybrid cloud storage that connects on-premises environment(data center, office) with the Aws cloud storage
+	Keeps active data locally, archives to cloud
+
+Aws outpost
+Amazon Outposts is a fully managed service that brings AWS infrastructure and services directly to  on-premises location (like a data center, office, or factory).
+  We get AWS hardware delivered to your site
+  It runs AWS services locally, like EC2, EBS, RDS, etc.
+  It’s managed by AWS, just like the cloud
+Think of Outposts as "AWS in a box" that lives at your physical location but works just like AWS cloud
+
+AWS snowball
+AWS Snowball is a physical device provided by AWS that is used to transfer large amounts of data to and from AWS without using the internet.
+    Think of Snowball as a secure, rugged hard drive shipped by AWS to your site — you load your data onto it,     send it back, and AWS uploads it to the cloud.
+    Like that we can also copy data from it.
+
+AWS FSx
+In Amazon Web Services (AWS), FSx stands for Amazon FSx, a fully managed file storage service. It provides a variety of file systems like Windows File Server, Lustre, and Network File System (NFS), allowing users to easily launch and run these file systems in the cloud
+
+What is AWS FSx file gateway
+AWS FSx File Gateway is a hybrid file storage service that allows your on-premises users and applications(servers) to access Amazon FSx file systems (like FSx for Windows File Server or FSx for Lustre)using standard file protocols like SMB or NFS
+Think of it as a bridge between your on-premises environment and your FSx file system in AWS.
+
+AWS IAM Access Analyzer is a security feature that helps users identify potential security risks by analyzing the access policies associated with their AWS resources. It helps in detecting unintended public and cross-account access to resources, and can also identify unused access to help users implement the principle of least privilege
+
+An X.509 certificate is a digital document that verifies the identity of an entity (like a person, website, or device) over the internet
+Imagine you’re entering a secure building. At the door, the security guard asks you for your ID.
+If the ID is valid and trusted, you're allowed in.
+If it's fake or not trusted, you're denied entry.
+The X.509 certificate plays the role of that ID for websites or applications in the digital world.
+What does it contain?
+An X.509 certificate has:
+ Public key (used for encryption)
+ Name of owner (like a domain: www.example.com)
+ Issuer’s name (the CA—Certificate Authority who gave the ID)
+ Validity period (start and expiry date)
+ Digital signature (proof it’s issued by a trusted CA)
+
+
+ What is Amazon Athena?
+Amazon Athena is a serverless tool from AWS that lets you query data stored in Amazon S3 using SQL — no need to set up a database or server
+Imagine you have a huge spreadsheet (CSV, JSON, or Parquet files) saved in S3.
+Instead of opening Excel and scrolling through it manually, you just write a SQL query like:
+   SELECT * FROM my_s3_data WHERE year = 2024;
+And Athena gives you the result instantly — without you managing any servers or databases
+
+Federated Query in Amazon Athena allows you to run SQL queries across multiple data sources — not just S3 — as if they were all in a single database.
+Athena uses a Data Source Connector (a Lambda function) to connect to those external data sources.
+The Lambda function executes the query (or part of it) on the external database (like RDS or DynamoDB).
+
+
+ What is AWS Glue?
+AWS Glue is a serverless data integration and ETL (Extract, Transform, Load) service that helps you prepare, clean, and move data from one place to another.
+Imagine you have messy data in different formats stored across S3, databases, and other sources.
+You want to:
+ Clean it (remove duplicates, fix formats)
+ Transform it (convert formats, join tables)
+Move it to a database or data warehouse
+AWS Glue does all of this automatically — no need to manage servers.
+It is also explicitly meant for file-format transformation jobs, especially large batches.
+like to convert .cs file into parquet format ( for large data proccessig)
+
+
+What is AWS Elastic Beanstalk?
+
+Elastic Beanstalk (EB) is a Platform as a Service (PaaS) offered by AWS that allows you to deploy and manage applications easily without worrying about the underlying infrastructure.
+
+You just upload your application code, and Beanstalk automatically handles:
+Provisioning EC2 instances
+Setting up load balancers, auto scaling groups
+Monitoring health
+Deploying new versions
+Managing the runtime environment (like Java, .NET, Python, Node.js, PHP, Go, etc.)
+
+
+
+What is API gateway 
+Amazon API Gateway is an AWS service for creating, publishing, maintaining, monitoring, and securing REST, HTTP, and WebSocket APIs at any scale.
+Api gateway is fully managed aws services which act as front door to backend services ( EC2,S3, lambda adn ECS etc....)
+It recieves the API request from the client and forwards them to the appropriate the backend servce and sends responce back to the client 
+
+
+What is Amazon EMR?
+Amazon EMR (Elastic MapReduce) is a fully managed big data processing service that makes it easy, fast, and cost-effective to process large amounts of data across a cluster of Amazon EC2 instances.
+
+
+What is AWS Lake Formation (in simple terms)?
+ AWS Lake Formation is a data lake management and security service.
+It helps you build, organize, secure, and govern a data lake  — easily and centrally.
+
+Imagine your company stores data from:
+Sales systems (CSV files),
+Marketing (Excel),
+IoT sensors (JSON files),
+Databases (SQL dumps),
+Logs (text files).
+
+You can dump all these files into Amazon S3.
+
+That’s your data lake —
+a big central storage that holds all kinds of data (structured, semi-structured, or unstructured).
+But just putting data in S3 is like dumping books into a huge room.
+
+You can’t:
+Search easily 
+Control who reads what 
+Track access 
+That’s where Lake Formation comes in.
+
+Step 2: What AWS Lake Formation Does
+Think of AWS Lake Formation as the “librarian + security guard + manager” for your data lake.
+
+
+Aws organizations
+aws organizations is a global service that is used to manage multiple account 
+AWS Organizations is a service that helps you centrally manage multiple AWS accounts under a single management structure.
+Think of it like a “parent company” that owns multiple “departments” (AWS accounts) — each for different projects, teams, or environments.
+
+Service Control Policies (SCPs)
+SCPs are like “guardrails” for accounts.
+They don’t give permissions, but set boundaries on what can or cannot be done in an account.
+IAM policies = “what this user can do.”
+SCPs = “what no one in this account can do, no matter what.”
+
+
+What is Amazon Cognito
+Amazon Cognito is an AWS service for user authentication, authorization, and user management — basically, it helps us add login, signup, and identity management to  applications without building  own backend for it.
+Think of it as “AWS’s login system for our appplication.
+
+It has two main components
+Cognito user pool: Manages  app’s users — handles sign-up, sign-in, and user profiles.
+Cognito identity pool: Gives temporary AWS credentials to users so they can access AWS services (like S3, DynamoDB).
+
+
+What is Amazon Rekognition
+Amazon Rekognition is an AI-based image and video analysis service by AWS.
+which is usedd to detect and recognize objects, people, text, scenes, activities,  in images or videos.
+
+How It Works (Simple Explanation)
+When you upload an image or video to Rekognition:
+Rekognition uses pre-trained machine learning models.
+It analyzes the visual data.
+It returns structured information like:
+“There is a person, wearing glasses, smiling.”
+“This image contains a dog and a car.”
+“This person matches someone in your employee database.”
+You don’t need to build or train your own ML model — Rekognition does that for you.
+
+
+What is Amazon Transcribe
+Amazon Transcribe is an AI-based service that will  automatically convert audio-to-text.
+It can convert spoken words (from audio or video files) into written text
+
+What is Amazon polly 
+Amazon polly is an AI based service by aws that will automatically convert text to audio(speech)
+
+What is Amazon Translate
+Amazon translate is AI based service which automatically convert text from one language to another language 
+example A text of english ( MY name is ajay ) is convert to another language Hindi ( mera naam ajay)
+
+
+What is Amazon Lex
+Amazon lex is an AI based service by aws which uses same technology as Amazon ALEXA
+It understands what people saying (or typing ) and respond back intelligently.
+
+What is Amazon Connect
+Amazon connect is AI based service by aws which is basicallyy virtual call center hosted on aws
+Amazon Connect is designed to make it easy for companies to set up and manage a scalable, intelligent contact center that can handle:
+Inbound calls (customers calling your company)
+Outbound calls (agents calling customers)
+Chat conversations (web or mobile chat support)
+
+What is Amazon Forecast
+Amazon connect is AI based service by aws
+It helps to  predict future business outcomes — like sales, demand, inventory, web traffic, or resource usage — based on your historical data.
+
+
+
+
+What is SSM parameter store
+System parameter store is a service provided by aws which is used for storing configuration data and secrets
+like databases environment variables , secrects  and api key ... securly and centrally so  that we don’t have to hardcode them in  code or scripts
+
+Example
+Applications need database credentials, API keys, server endpoints, etc. to connect with databses 
+
+
+What is amazon secret manager
+Secret manager is a servive provided by aws which is used to store , maanger  and automatically rotate the secrets like databases passwords, ssh keys , access token etc.....
+
+
+What is amazon certificate manager (ACM)
+ACM is a service provided by aws which is used to manages the SSL/TLS certificates 
+AWS Certificate Manager (ACM) is an AWS service that automatically provides, renews, and manages SSL/TLS certificates to secure your websites and APIs using HTTPS.
+
+integrates directly with AWS services like Load Balancers, CloudFront, and API Gateway for easy deployment.
+
+
+What is web application firewall
+AWS Web Application Firewall (WAF) is a security service that protects  web applications from common web attacks like SQL injection, XSS, and malicious bots.
+AWS WAF works only with Layer 7 services like Application Load Balancer (ALB), CloudFront, and API Gateway.
+It does not support Network Load Balancer (NLB) because NLB operates at Layer 4 and does not process HTTP/S requests.
+
+What is firewall manager 
+AWS Firewall Manager is a centralized security management service that lets you configure and manage firewall rules across multiple AWS accounts and resources — all from one place
+
+Manage rules in all accounts of an AWS Organization
+
+AWS Firewall Manager is a central security management service that helps you define and automatically enforce firewall rules (WAF, Shield, Network Firewall, and Security Group policies) across all accounts in your AWS Organization.
+
+
+AWS gaurdduty
+Amazon GuardDuty is an intelligent threat detection service provided by AWS which uses machine learning algorithms to continuously monitors  AWS accounts, workloads, and data for malicious activity or unauthorized behavior
+
+Input data includes:VPC Flow Logs, CloudTrail Events Logs ,Kubernetes Audit Logs DNS Logs etc........
+
+What is Amazon Macie
+Amazon Macie is a security service that uses machine learning (ML) and pattern matching to discover, classify, and protect sensitive data (personal data information)  stored in Amazon S3.
+Macie automatically finds important or sensitive data (like names, credit card numbers, passwords, phone numeber . emial id etcs.) in your S3 buckets, and helps you keep it safe.
+
+
+What Is Amazon Network Firewall
+Amazon Network Firewall is a managed, stateful, network security service that helps you protect your Amazon VPCs from network-based threats — both inbound and outbound — by filtering traffic at the network level (Layer 3 ) and application level (Layer 7).
+
+• From Layer 3 to Layer 7 protection
+  • Any direction, you can inspect
+  • VPC to VPC traffic
+  • Outbound to internet
+  • Inbound from internet
+  • To / from Direct Connect & Site-to-Site VPN
+
+
+What is Amazon Elastic Transcoder
+Amazon Elastic Transcoder is a media transcoding service that allows you to convert (or transcode) video and audio files from one format to another in a scalable, cost-effective, and easy-to-use way.
+
+Imagine you upload a video file (say, .mov or .avi) to S3.
+You want to make it playable on:
+A smartphone (needs .mp4 in 720p)
+A web browser (needs .webm)
+A smart TV (needs .mp4 in 1080p)
+
+
+What is AWS Audit Manager?
+AWS Audit Manager is a compliance and audit automation service that helps you continuously assess your AWS resources and operations against industry standards and regulatory frameworks — like ISO 27001, SOC 2, PCI-DSS, GDPR, and CIS AWS Foundations Benchmark.
+
+What is AWS Trusted Advisor
+AWS Trusted Advisor is a real-time guidance and recommendation tool that helps you optimize your AWS environment for:
+Cost savings 
+Performance 
+Security 
+Fault tolerance 
+Service limits 
+
+AWS Trusted Advisor is an online tool that analyzes your AWS environment and gives real-time recommendations to help you reduce cost, improve performance, strengthen security, and increase reliability.
+It’s like having an automated AWS consultant checking your account 24/7 for best practices.
+
+
+What is AWS Inspector?
+AWS Inspector continuously scans your EC2 instances, container images in ECR, and Lambda functions for known vulnerabilities (CVEs) and security issues, and gives you detailed reports on how to fix them.
+
+Think of it as an automated vulnerability scanner for your AWS resources.
+
+
+What is gateway load balancer
+A Gateway Load Balancer (GWLB) in AWS is a special type of load balancer designed specifically for security appliances—like firewalls, intrusion detection systems (IDS), intrusion prevention systems (IPS), deep packet inspection, and traffic filtering.
+It combines transparent network routing and load balancing for third-party virtual appliances
+
+What is VPC Reachability Analyzer in AWS
+VPC Reachability Analyzer is a built-in AWS networking tool that helps you troubleshoot and verify network connectivity between two resources inside your AWS network.
+In simple terms:
+It tells you whether traffic can flow from Source → Destination and exactly where it gets blocked if it can’t.
+
+It simulates the network path and answers:
+Is EC2 A able to reach EC2 B?
+Can my EC2 reach the internet?
+Can my ALB reach my backend servers?
+Is my application subnet able to reach RDS?
+
+If NO, it shows:
+Which component is blocking traffic
+Why it is failing
+
+
+What is VPC Network Access Analyzer?
+VPC Network Access Analyzer is a security analysis tool that helps you:
+  Identify unintended or risky network access to your AWS resources.
+It answers the question:
+ “Who can access this resource, and from where?”
+
+It focuses on:
+Overly permissive access
+Security risks
+Compliance validation
+
+What is AWS datasync
+AWS DataSync is a fully managed data transfer service that helps you automatically move large amounts of data between:
+On-premises storage → AWS
+AWS services → On-premises
+AWS → AWS (e.g., S3 to EFS, EFS to FSx, etc.)
+
+
+What is Global accelerator ?
+Global accelerator is a networking service that improves the perforamnce, security and availability of 
+global applicayion
+It reduces the latency , routes traffic to the nearest edge location and provides static IP address for entry into application endpoint ( Front-end tier )
+
+Global accelerator supports all kind of load balacner 
+
+
+What is AWS transfer family
+Transfer family is a fully managed servces which is used to securly transfer files into and out of aws s3 or efs using file transfer protocal
+SFTP (Secure File Transfer Protocol)
+FTPS (FTP over SSL)
+FTP (not encrypted, rarely recommended)
+AS2 (used for B2B electronic data interchange)
+
+In simple terms:
+AWS Transfer Family allows old on-premise systems, partners, vendors, or applications to transfer files to AWS without changing their existing file transfer tools.
+
+
+What is DMS ( database migration service)
+AWS DMS is a managed service that helps you migrate databases to AWS with minimal downtime.
+
+It lets you:
+Keep the source database online
+Continuously replicate changes destination database
+Move data to AWS without stopping applications
+
+DMS migrate database in 3 phases
+There are three types:
+Full load – copies existing data
+CDC (Change Data Capture) – replicates ongoing changes
+Full load + CDC – most common
+
+For online migration, you use:
+Full load + ongoing replication (CDC)
+
+
+What is Amazon Pinpoint?
+Amazon Pinpoint is an AWS service used to send targeted messages to users and understand how users interact with those messages.
+
+It helps you:
+ Send messages (SMS, Email, Push notifications)
+ Target the right users
+ Track user behavior and responses
+ Run marketing campaigns and user journeys
+Think of Pinpoint as “AWS’s customer communication and engagement service.”
+
+It is mainly used for:
+Marketing communications
+User engagement
+Notifications to mobile and web users
+Analytics on user behavior
+
+
+Statefull
+The system remembers data (state) about users or processes on the same server between requests.
+Stateful = Bank cashier
+You talk to the same person
+They remember your transaction
+
+EC2 instance storing data on disk
+MySQL running on EC2
+App storing files on /var/data
+Session stored on EC2 memory
+ If EC2 dies → data lost unless backed up
+Stateful services
+EC2 + EBS
+Amazon RDS
+Amazon ElastiCache (Redis)
+
+Stateless
+The system does NOT remember anything locally.
+Each request is independent.
+
+Stateless = ATM
+Any ATM can serve you
+All info comes from backend
+
+
+
+gp3 volume = from 3000 to 16000 IOPS
+io1 volume = frm 100 ot 64000  IOPS
+io2 volume = from 100 to 64000 IPOS
+
+
+AWS WAF (Web Application Firewall)
+Protects against:
+ SQL injection
+ Cross-site scripting (XSS)
+ Malicious HTTP floods
+Works at Layer 7 (HTTP/HTTPS)
+
+
+What is AWS workload discovery??
+Aws workload discovery is a service provided by aws whihc is used to  automatically discover aws resouces
+across regions or account and mapping the relationship between the resouces and generates architectural diagrams
+
+
+

@@ -1,0 +1,18 @@
+To copy the file from local machine to instance ( ubuntu)
+
+# run commadnd 
+
+scp -i "C:\Users\Cjp\Downloads\demo2.pem" "C:\Users\Cjp\Downloads\realistic_medical_data.csv" ubuntu@3.16.79.141:/home/ubuntu/
+
+##( where 3.16.79.141 public ip of instacne)
+
+## If permission denied error comes
+
+## run below command
+
+icacls "C:\Users\Cjp\Downloads\demo2.pem" /inheritance:r
+icacls "C:\Users\Cjp\Downloads\demo2.pem" /remove "Everyone" "BUILTIN\Administrators" "NT AUTHORITY\SYSTEM" "DESKTOP-OG3L566\None"
+icacls "C:\Users\Cjp\Downloads\demo2.pem" /grant:r "${env:USERNAME}:R"
+
+
+## then again run scp to command to copy 

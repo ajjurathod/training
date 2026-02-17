@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('code checkout') {
+            steps {
+                git branch: "main", url: "https://github.com/ajjurathod/argocd-project-new.git"
+            }
+        }
+        stage('build and test') {
+            steps {
+                sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package"
+            }
+        }
+        stage('Static Code Analysis') {
+            environment {
+                SONAR_URL = "http://18.212.125.148:9000"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                }
+            }
+        }
+        stage('docker build image') {
+            steps {
+                sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ajjurathod1998/argocd-image1 ."
+            }
+        }
+       stage('push to dockerhub') {
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+            sh '''
+                 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                  docker push ajjurathod1998/argocd-image1
+            '''
+           }
+        }
+      }
+
+    }
+}

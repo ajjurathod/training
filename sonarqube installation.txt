@@ -1,0 +1,16 @@
+#to install sonarqube and give path to jenkins 
+# Install unzip if missing
+sudo apt update
+sudo apt install -y unzip
+
+# Download the latest Sonar Scanner (adjust URL if you want a newer version)
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+
+# Extract to /opt
+sudo unzip sonar-scanner-cli-5.0.1.3006-linux.zip -d /opt
+
+# Create symlink
+sudo ln -s /opt/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+# Verify
+sonar-scanner --version

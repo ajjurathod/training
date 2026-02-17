@@ -1,0 +1,31 @@
+To get sns notification if action done on s3 bucket
+
+Steps
+ create sns topic (Standard tpoic)
+ create subscription (mail) [there will other options like lambda, sms,sqa,http/s etc]
+ confirm subscription
+ Now create a buket 
+ Go to the topic ==>edit==>acccess policy .there add following policy with mentioning proper topic arn and bucker name
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Action": "SNS:Publish",
+      "Resource": "arn:aws:sns:us-east-2:545113611061:test-topic",
+      "Condition": {
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:s3:::ajay2492"
+        }
+      }
+    }
+  ]
+} 
+  
+ ==>buket==>properties==>event notification and choose topic 
+
+now add files or delete existing file to the bucket you will get notification
+ 

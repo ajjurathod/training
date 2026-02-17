@@ -1,0 +1,14 @@
+Please refer cloudbeez folder for code of the project
+
+Terraform ETL project
+Objects uploaded into lambda should trigger lambda fucntion and data must be stored postgresql
+services involving 
+VPC, lambda(public subnet), postgresql(private subnet) and s3 bucjet 
+
+POINT TO REMEMBER
+So if lambda is in public subnet then we need to create VPC endpoint ( for s3) gateway endpoint in public subnet
+( no need of  nat gateway )
+
+rest are the same of the code 
+path of code 
+this PC\C:\Terraform\cloudbeez
