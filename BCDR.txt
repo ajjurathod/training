@@ -1,0 +1,31 @@
+data archiving 
+show that Data retrival time from glacier 
+
+
+BCDR
+
+add testing proceed to all 
+and say the that RPO is this much and RTO is this hence bussiness continuety is not effected
+
+S3 best practise cross check with aws WAF with proof
+
+•	Regional Outage Simulation (EBS) 
+	AWS Identity and Access Management (IAM) policies were applied to restrict access to Region 1, simulating a regional outage
+	EBS volumes in the primary region became unavailable.
+	DLM was configured to take automated cross-regional snapshots
+	Used cross-region snapshot copies to launch new EC2 instances in the DR region.
+	Attached replicated volumes and restored services
+
+
+As part of BCDR testing, we simulated multiple outage scenarios on the healthcare data platform to validate recovery procedures. The objective was to ensure data protection, regulatory compliance, and uninterrupted business operations. Each test was executed in a controlled manner, and recovery steps were validated against defined RPO (15 minutes) and RTO (30 minutes).
+
+
+•	Regional Outage Simulation (S3)
+	AWS Identity and Access Management (IAM) policies were applied to restrict access to Region 1, simulating a regional outage
+	Amazon S3 Cross-Region Replication (CRR) ensured that all data stored in S3-C (Region 1) was continuously replicated to S3-C (Region 2).
+	Analytics workloads leveraging Amazon Athena queries, API Gateway integrations, and Power BI dashboards were redirected to use the replica bucket in Region 2.
+	Data was immediately available in Region 2 due to CRR.
+	Recovery Point Objective (RPO): ~0 (no data loss).
+Recovery Time Objective (RTO):  minutes, as application endpoints switched to Region 2.
+
+

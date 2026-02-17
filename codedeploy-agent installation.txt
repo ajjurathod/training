@@ -1,0 +1,13 @@
+To install code-deploy agent on instance 
+
+sudo apt install ruby-full -y
+sudo apt install wget
+wget https://bucket-name.s3.region-identifier.amazonaws.com/latest/install 
+# chanege bucket name and region name by clicking on Resource kit bucket names by Region from installation page
+
+chmod +x ./install
+
+sudo ./install auto 
+systemctl status codedeploy-agent
+
+now attach IAM role with code deploy permission
