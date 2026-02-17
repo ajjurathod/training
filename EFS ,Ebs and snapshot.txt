@@ -1,0 +1,46 @@
+To install efs 
+run the following command in as many instances you want to 
+
+/home/ubuntu[]:  apt install nfs-common -y
+/home/ubuntu[]: mkdir efs
+/home/ubuntu[]: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0d11dd88b30e1205e.efs.us-east-2.amazonaws.com:/ efs
+                this above command available from efs attach 
+/home/ubuntu[]: cd efs
+/home/ubuntu/efs[]: create file
+
+now check in another instance same file will present 
+
+
+
+Ebs volume
+
+ebs are availability zone specific 
+To attach ebs volume to another instance which is in different AZ
+first create snapshot of ebs volume of that perticular instance 
+ => volme ==>select volume=>action==>creaate snapshot 
+
+now go to that perticular snapshot 
+ ==>snapshot==>action==>create volume
+   give volume name and IMPORTANT CHOOSE AZ in which another instance is present to which we want to attach volume
+
+
+https://apn-checklists.s3.amazonaws.com/competency/storage/consulting/CL0TGLv2D.html
+
+
+aws direct connect 
+when to use it 
+why direct connect only why can't other services 
+in what all scenarion we use it 
+standard process for using dorect connect step by step so that it can be used as real time configuration
+
+Like we follow standard process to configure this 
+like
+
+as a patner what and all data tranfer we ding in company (brief)
+on which scenarios use case we cjp using data transfer with direct connect
+brief about direct  connect
+stanadrd process to support the direct connect data transer whcih should match the WAF
+and then conclusion
+
+
+

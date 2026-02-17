@@ -1,0 +1,60 @@
+In our healthcare workload, the internal application runs on an EC2 instance that utilizes multiple EBS volumes for database data, logs, and application files. To ensure metadata and data remain consistent across volumes, we configured Amazon Data Lifecycle Manager (DLM) to perform scheduled multi-volume EBS snapshots. These snapshots are encrypted using AWS KMS and are replicated across regions for disaster recovery.
+
+“In our healthcare application, the EC2 instance hosting the clinical trial system is provisioned with multiple EBS volumes (application, database, and logs). To ensure metadata and data remain coherent, we implemented multi-volume backups using AWS Backup. Backup policies are configured at the volume manager level, ensuring that snapshots across all attached EBS volumes are created at the exact same point in time. This provides a crash-consistent backup set across volumes.
+
+
+“In our healthcare application environment, the EC2 instance hosting the internal application is configured with three attached Amazon EBS volumes:
+To ensure consistent backups across these multiple volumes, we implemented an Amazon Data Lifecycle Manager (DLM) multi-volume snapshot policy. This policy triggers crash-consistent, point-in-time snapshots across all volumes simultaneously, ensuring that metadata and data across sub-component volumes remain coherent. These snapshots are stored in Amazon S3 and can be used for both full environment restoration and granular volume recovery. This approach ensures no data corruption and satisfies the requirement for consistent multi-volume backups.”
+
+
+In our healthcare application hosted on Amazon EC2, the system leverages multiple Amazon EBS volumes—one for the operating system, one for application binaries, and separate volumes for patient data and log files. To maintain a consistent state during backups, we adopted a multi-volume backup strategy. Instead of snapshotting each EBS volume independently, we configured Amazon Data Lifecycle Manager (DLM) to take coordinated snapshots across all volumes attached to the EC2 instance
+
+The snapshots are further replicated to a secondary AWS Region and stored in S3 Glacier Deep Archive for long-term retention, ensuring business continuity and compliance with healthcare regulations. This design provides a crash-consistent multi-volume backup solution that aligns with EXBCN-002 requirements, while also enabling fast restore of entire EC2 instances or individual volumes without data mismatch.
+
+
+
+
+for this specific usecase there is no requirement for multivolume backup ( database reolicas bacup) but we have standard procedure for multi volume backup 
+
+Standard procedure for multi volume backup which should match the task requiremet
+
+Procedure
+
+1. Identify Application Volumes
+All application data volumes attached to the EC2 instance are abstracted and managed using a Logical Volume Manager (LVM).
+This ensures multiple EBS volumes function as a single logical entity, simplifying snapshot management.
+
+2. Prepare for Backup
+Application I/O operations are quiesced or frozen temporarily to avoid write contention during backup.
+This step ensures crash-consistent backups and prevents partial writes across volumes.
+
+3. Initiate Snapshot Process
+A snapshot is initiated at the LVM abstraction layer, ensuring that all subcomponent volumes are captured consistently.
+The snapshot is taken at the instance level, not individual disks, fulfilling AWS’s guidance for consistent backups.
+
+4. Metadata and Consistency Validation
+Backup processes ensure that LVM metadata and filesystem states are included in the snapshot.
+This guarantees the ability to restore the system without data corruption across the volumes.
+
+5. Backup Automation
+Backup operations are automated using AWS Data Lifecycle Manager (DLM) or custom automation scripts.
+Policies enforce periodic multi-volume snapshot creation (daily, weekly, monthly) in line with RPO/RTO requirements.
+
+6. Security and Compliance
+All snapshots are encrypted using AWS KMS keys.
+Snapshot access is restricted using IAM policies and cross-account permissions only when required.
+
+7. Retention and Lifecycle Management
+Snapshot retention is managed through tag-based policies, ensuring old backups are deleted as per compliance timelines.
+Critical backups are copied to secondary Regions (cross-Region replication) for disaster recovery purposes.
+
+8. Recovery Testing
+Periodic restore drills are performed by creating new volumes from snapshots and attaching them to test instances.
+Application teams validate data integrity and recovery time against defined SLAs.
+
+This standardized backup procedure ensures that multi-volume backups are:
+Performed at the logical volume layer, not just individual disks.
+Crash-consistent, application-aware, and metadata-coherent.
+Aligned with AWS best practices for enterprise-grade backup and recovery.
+Integrated with security, compliance, and lifecycle management policies to meet regulatory requirements.
+By following this process, our organization ensures end-to-end data protection and audit-ready documentation for AWS Storage Competency

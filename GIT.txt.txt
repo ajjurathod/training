@@ -1,0 +1,74 @@
+git is Distributed Version Control System
+
+1) git init  --> Initialize a working dorectory into  a Git repository
+2) git clone --> clone a existing repository
+3) git status  -check the status of working directory and staging directory
+4) git add filename - add the file to staging directory
+5) git add . -it will add all the files of  working directory to staging directory)
+   git ls-files --stage == to see the files in staging area
+6) git commit -m "message" - it will commit/save ALL the files present in STAGING area into git repository with message (local repo)
+   git commit <file-name> -m "message" <file-name> == if there are more than one file present in STAGING area and we want to commit only a perticular file
+7) git log - show commit history
+8) git log --oneline - show commit history in single line
+9) git branch - show all the branches
+10)git branch <branch-name> - create new branch
+11)git diff <branch1> <branch2> - shows the difference between both branche
+12)git branch -d <branch name> - deletes the branch unmerged  branch
+13)git branch -D <branch name> -Forecefully deletes a branch merged branch
+14)git merge <destination branch> -Merge the files from destination branch to source branch
+15)git rebase <source branch> -Will get the changes from source branch to destination branch and commit history will change
+   (Commit ID will change only of new commit of the that branch)
+16)git remote add origin <repo url> - Used to link between local git repository and remote repository
+17)git push origin <branch name> -Pushes commited changes from local repository to remote repository
+18)git remote - List all the remote repositories associated with current repository
+19) git remote -v -This displays the names and URLs of the remote repositories, including whether each URL is used for fetching or pushing.
+20) git remote remove <name> -Removes a remote repository associated with git repository
+21) git remote rename <old name> <new name> - Rename remote repository name with new one
+22) git stash -m "message" <file-name> -stash staged files without commiting while changing branch
+23) git stash -u -m "message" <file-name> == stash working directory files without commiting while changing branch
+24) git stash pop -want to retrieve work.
+    git stash drop stash@{0} == this will delete the stash 
+25) git revert <commit id>    == to make the commit uncommited
+26) git reset <file>  - Unstage a file while retaining changes in the working directory.(only that perticular file)
+    git reset . = It will remove all the files from staging area and add them in working directory
+27) git reset --mixed - Discard the changes in local repository and staging directory
+28) git reset --soft - Discard the changes only in local repo
+29) 
+30) git rm <filename>   --> Remove from staging and working
+31) git rm --cached <filename>  - remove from staging area
+32) git restore --staged <filename> -Removes from staging area and keeps it in working direc
+33) git config --global user.name "Your Name" - To set your name globally (applies to all repositories on your system)
+34) git config --global email "email" - Set email id
+35) git cherrypick <commit id> - It will get the changes from one branch to another branch
+36) git commit --amend -we will able to rewrite the commit history
+37) git pull -get the changes from remote repository to local repository
+38) git fetch -Downloads changes from remote without modifying the working directory
+        (Stores files in backened memory ..To get thise files run GIT MERGER ORIGIN/MASTER)
+39) git branch -r - list the branches in remote repository
+40) git branch -a -Lists all the branches in remote and local repository
+41) git restore <file-name> == to restore the before STAGING and commiting
+42) git checkout -- <file-name> == to restore the files of staging but before commiting
+43) git checkout <commit-ID> -- <file-name> == to restore the file once the commit is done 
+(if we ran revert command to undo the existing the commint , file gets deleted to restore that file run above command)
+
+
+
+Command to create git repo in local or to initiliaze the working directory into git repo
+Git init 
+
+
+To see the commit histroy of another branch
+be in any one branch and run the command 
+git log <another branch name >
+
+To merge everything from subbranch to main branch keeping the commit history same 
+from main branch run this commad 
+git merge <subbranch name>
+
+to merge only a perticular commit into main branch 
+git cherry-pick < commit id of another branch> --> this ensures only a perticular commit is added to main branch 
+
+
+
+
+

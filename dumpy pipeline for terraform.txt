@@ -1,0 +1,69 @@
+pipeline {
+    agent { label 'kube' }
+   
+
+    stages {
+        stage('Code Checkout') {
+            steps {
+                git branch: 'master', url: "https://github.com/ajjurathod/Chatbot-NodeJS.git"
+            }
+        }
+
+        stage('NPM Install and Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar-server') {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=terraform \
+                          
+                        '''
+                    }
+                }
+            }
+        }
+        stage('trivy file scan'){
+            steps{
+                sh "trivy fs --exit-code 0 --severity HIGH,CRITICAL ."
+
+            }
+        }
+        stage('dependency check'){
+            steps{
+                sh "trivy fs --exit-code 1 --vuln-type library --severity HIGH,CRITICAL ."
+            }
+        }
+        stage('docker image') {
+            steps{
+                sh "docker build -t ajjurathod1998/terraform.v:0 . "
+            }
+        }
+        stage('trivy image scan'){
+            steps{
+                sh "trivy image  ajjurathod1998/terraform.v:0"
+            }
+        }
+        stage('push to dockerhub'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-token', passwordVariable: 'passwordVariable', usernameVariable: 'usernameVariable')]) {
+                 sh " echo $passwordVariable | docker login -u $usernameVariable  --password-stdin"
+                 sh "docker push ajjurathod1998/terraform.v:0"
+                  } 
+            }
+        }
+        stage('deploying '){
+            steps{
+                sh "kubectl apply -f deployment.yaml"
+                sh "kubectl apply -f service.yaml"
+            }
+        }
+    }
+}
+

@@ -1,0 +1,96 @@
+To design an efficient, secure, and cost-optimized backup and restore architecture, we followed a structured assessment and design process based on AWS Well-Architected Framework pillars: Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization
+We conducted a structured technical assessment to determine the customer's storage needs by analyzing workload patterns, data criticality, regulatory requirements, and access frequency. Based on this, we designed a highly durable and cost-efficient backup strategy using Amazon S3, Glacier, and EBS Snapshots. We automated snapshot creation and data tiering via DLM and S3 Lifecycle policies, enabled encryption and centralized logging for compliance, and aligned the entire architecture with the AWS Well-Architected Framework. Evidence of these practices is attached in the form of lifecycle policies, CloudTrail, and encryption configuration.The engagement included the following key technical activities and best practices:
+
+Initial Customer Assessment
+Conducted technical discovery sessions with the customer’s team to understand
+ Their on-prem database workloads, Security (data protection and encryption), lifecycle management, and Backup/archival gaps and Compliance
+
+
+
+
+
+
+Automation and Lifecycle Optimization
+Use Case Categorization
+Storage Tiering and Archival
+Mapped data into use cases:
+Frequently accessed – stored in Amazon S3 Standard or S3 Intelligent-Tiering.
+Infrequently accessed – transitioned to S3 Glacier Instant Retrieval or Deep Archive.
+Configured S3 Lifecycle policy to transition of data between storage classes based on access pattern
+Snapshots – managed using Amazon Data Lifecycle Manager (DLM) for EBS.
+ EBS snapshots for block-level backup of EC2 instances using Amazon Data Lifecycle Manager (DLM)
+
+Backup Schedulling 
+Used Amazon S3 for object-based backups.
+Used Amazon Glacier and S3 Glacier Deep Archive for long-term archival.
+Used Amazon Data Lifecycle Manager (DLM) to automate EBS volume snapshots.
+
+Security and Compliance Assessment
+Enabled SSE-KMS encryption for both:
+ Amazon S3 buckets (customer-managed keys)  
+ EBS snapshots 
+Enabled centralized logging using multi-region AWS CloudTrail  for full audit trails.
+Automation and Monitoring Strategy
+Implemented DLM policies to automate EBS snapshot creation and retention.
+Used Amazon CloudWatch for monitoring backup job health and success/failure metrics.
+Configured AWS Backup Vaults (if used) with resource tags for organizing backup policies.
+
+Disaster Recovery Integration
+ Enabled S3 Cross-Region Replication (CRR) for critical buckets
+ Snapshots were replicated manually across regions and stored with encryption and access policies
+
+
+
+Governance and Validation
+Ensured cross-region replication (CRR) for DR compliance.
+Scheduled periodic DR simulations and snapshot restore drills.
+Reviewed IAM access to backup resources with least privilege principle.
+
+Data sources (e.g., EC2/EBS volumes, on-premises data)
+Criticality of data (RTO/RPO expectations)
+Backup frequency and retention requirements
+Compliance and regulatory requirements (e.g., encryption, logging, auditability)
+
+
+To determine a customer’s storage needs, we followed  a structured approach which are as follows
+
+We conducted technical discovery sessions with the customer’s team to understand their on-prem database workloads, lifecycle management, Backup/archival gaps, and Compliance
+Identified key pain points:
+•	Absence of a centralized lifecycle and retention strategy, which resulted in the retention of a large volume of data and increasing storage costs
+•	No cross-region replication, leading to availability risks
+•	Missing backups or retention issues
+•	Lack of object-level logging and insufficient audit trails for compliance
+Based on the findings from the technical discovery sessions, we designed and implemented a robust, scalable, and secure storage architecture leveraging AWS services.
+The implemented solution included:
+
+
+
+
+
+ Deep Assessment of the Customer Environment
+ - Conducted technical discovery sessions using our internal storage assessment template to understand the customer’s on-premises workloads, lifecycle management strategy, backup/archival gaps, data retention needs, and compliance landscape.
+ - Analyzed data usage patterns, application IOPS requirements, storage tiers, and existing recovery processes.
+
+• Requirements Gathering
+ - Captured detailed requirements for backup, long-term archival, disaster recovery, data access latency, availability SLAs, performance, security, compliance, and data sovereignty.
+ - Used a standardized questionnaire/checklist to ensure no requirement was missed.
+
+• Identified Key Pain Points
+ - Identified gaps such as missing lifecycle policies, high storage costs, lack of cross-region replication, limited audit capabilities, and high RTOs due to manual processes.
+
+• Proposed a Well-Architected AWS Storage Solution
+ - Leveraged our internal Well-Architected-aligned design templates to propose AWS solutions focusing on reliability, operational excellence, cost optimization, security, and performance efficiency.
+
+• Storage Design & Implementation
+ - Designed a robust, scalable, and secure storage architecture using Amazon S3 (with lifecycle policies and cross-region replication), Amazon EBS (with encryption and snapshot automation), and Amazon Glacier for archival.
+ - Applied automation scripts and Infrastructure as Code (IaC) templates to accelerate deployment and maintain consistency.
+
+• Compliance & Governance Alignment
+ - Ensured the proposed solution met industry-specific regulations (e.g., GDPR, HIPAA) by leveraging encryption at rest/in transit, access control policies, logging with CloudTrail, and object-level auditing.
+
+• Documentation & Handoff
+ - Delivered complete design documentation, SOPs, and a storage operations guide using our pre-defined handover templates.
+
+
+
+
