@@ -1,0 +1,59 @@
+Docker 
+
+apt install docker.io -y == To install docker
+docker --version == to check version of docker
+docker run -it --name <container-name> <image-name> == To create/run container out of image .But in terminal mode onnce we 
+            come out of that container , container will stop automatically
+exit == to come out container
+docker images == to list the images
+docker ps == to see running containers
+docker ps -a == to list all containers running aswell stopped 
+
+Dockerfile for Nodejs application
+FROM node:18 == base image of perticular versiom
+WORKDIR /app == it will create /app working dir in the container
+COPY package.json ./ == it will copy package.json in the current working dir (/app) of container (./ indicates current working dir)
+RUN npm install
+COPY . . == copy file from local to container
+CMD ["node", "app.js"] == it starts the nodejs application
+
+docker build -t username/<image-name> . == to build docker image from dockerfile
+docker build -t username/<image-name> -f <Dockerfile-name> . ==> TO BUILD IMAGE with different DOCKERFILE NAME 
+          OR (if there are multiple dockerfile present in same directory , to create image out of specific Dockerfile)
+          <Dockerfile-name> ==Could be anything 
+docker run -td --name <container-name> -p 3000:3000 <image-name> == To expose our to internet (3000:3000 inticates systemport:containerPort)
+docker stop <container-name> == to stop container
+docker rm <container-name> == to delete container
+docker exec -it <container_name> /bin/bash     == to enter inside container
+docker exec -it <container_name> sh      ==   to enter inside container ( both are same )
+docker volume create <volume-name> == to create volume 
+docker volume ls == to list the volume
+docker run -td --name <container-name> -p 80:80 --mount source=<volume-name>,target=/app <image-name> == to mount volume to containr
+docker run -td --name <dest-new-cont-name> -p 85:85 --previleged=true --volumes-from <source-cont-name> <image-name>
+docker volume rm <volume-name> == to delete volume
+
+docker images prune == to delete unused the images
+docker container prune == to delete unused container
+
+docker rmi $(docker images -q) delete all images 
+docker rm $(docker ps -aq) delete all container
+
+docker network ls == to list network
+docker container inspect <container-name> == give details of container like Ip , networking type
+
+ docker network create --driver bridge <network-name>  == to create custom network 
+docker network connect <network-name> <container-name> == to connect existing contianer to perticular network
+docker run --name yashcontainer -itd -p 84:80 --network <network-name> <image-name>  == to create a new container and connecting to it perticular Network
+
+
+ways to create docker images 
+1 == from docker images
+docker build -t user-name/image-name .
+
+2 == from an existing container 
+docker commit <container-id> <image-name>
+
+
+
+
+

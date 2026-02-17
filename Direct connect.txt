@@ -1,0 +1,75 @@
+Standard Process for Direct Connect Implementation
+Our process for deploying and managing Direct Connect included:
+
+Step 1: Requirement Assessment
+Engaged with the customer to capture data transfer volumes, compliance requirements, and performance needs.
+Evaluated whether Direct Connect was the right fit compared to VPN, Snowball, or Transfer Acceleration.
+Created a design document highlighting bandwidth requirements, resiliency needs, and security controls.
+
+Step 2: Ordering/Provisioning
+Submitted Direct Connect order via AWS Console.
+Coordinated with an AWS Direct Connect Partner/Colocation provider for physical connection setup.
+Defined the port speed (1 Gbps, 10 Gbps, or higher with Link Aggregation).
+
+Step 3: Virtual Interface (VIF) Configuration
+Private VIF: For connecting to VPC private subnets.
+Public VIF: For accessing AWS public endpoints (e.g., S3, DynamoDB).
+Transit VIF: For connecting to multiple VPCs via AWS Transit Gateway.
+Configured BGP (Border Gateway Protocol) for dynamic routing between on-premises and AWS.
+
+Step 4: Network Integration
+Updated on-premises routers/firewalls for routing to AWS via Direct Connect.
+Established redundancy using a secondary Direct Connect connection or VPN as failover.
+
+Step 5: Testing & Validation
+Verified connectivity with latency benchmarks.
+Measured throughput with large dataset transfers (e.g., uploading clinical imaging datasets to S3).
+Ensured compliance with customer SLAs.
+
+Step 6: Monitoring & Operations
+Enabled monitoring through Amazon CloudWatch metrics and Direct Connect Monitoring.
+Configured alarms for link down events, packet drops, or latency deviations.
+Set up VPC Flow Logs to validate data transfer patterns.
+
+Step 7: Disaster Recovery & Failover
+Configured a VPN over the internet as failover in case Direct Connect link went down.
+Documented RTO/RPO impacts for customers, ensuring business continuity.
+
+
+Site-to-Site VPN: quick, encrypted over Internet — adequate for low throughput or temporary connectivity but not for sustained high-throughput or deterministic latency.
+S3 Transfer Acceleration: accelerates uploads from remote clients but is not a replacement for a private, persistent hybrid network.
+AWS Snowball / Snowmobile: excellent for one-time bulk migrations (offline) — not suitable for continuing real-time workloads.
+
+
+Step 7 — Monitoring & operations
+
+CloudWatch: Monitor DX metrics (bps, packets, errors) and set alarms for interface down, high packet drops, or throughput thresholds.
+VPC Flow Logs: Enable to inspect traffic flows and for forensic / validation evidence.
+Route monitoring: Monitor BGP flaps, AS path changes, and prefix adverts; add alerts to notify network ops.
+Runbook & escalation: Maintain a runbook with step-by-step troubleshooting for layer-1 (cross-connect), layer-2 (VLAN), layer-3 (BGP), and links to vendor support and the DX Partner contacts.
+	Maintenance windows: Coordinate scheduled maintenance with AWS and colocation partner; collect change approvals and backout plans.
+
+
+CloudWatch Alarms: We enable Amazon CloudWatch metrics such as ConnectionState, VirtualInterfaceBpsIn, VirtualInterfaceBpsOut, and VirtualInterfacePacketsDropped to monitor bandwidth utilization, latency, and connection stability.
+
+•	Deliver LOA-CFA to the colocation provider or the AWS Direct Connect Partner so they can order and install the cross-connect. If already have equipment at the AWS Direct Connect location, contact the colocation provider to request a cross-network connection.
+
+
+
+      Step 2: Accept the hosted connection
+•	For hosted connections, our standard process requires the customer to accept the provisioned connection in the AWS Direct Connect console before virtual interfaces (VIFs) can be created. This step ensures that ownership, visibility, and governance are properly established at the AWS account level.
+
+
+Every VIF is configured with standardized parameters, including VLAN IDs, BGP Autonomous System Numbers (ASNs), and peer IP addresses. Jumbo frames (MTU 9001) are always enabled to optimize throughput for large-scale storage transfers. Security is embedded through, and mandatory MD5 authentication for all BGP sessions route filtering ensures that only approved prefixes are exchanged.
+
+
+Choosing a Transfer Mode
+     Snowball Edge supports multiple methods depending on workload and environment needs:
+•	S3 Adapter
+Exposes the Snowball device as an Amazon S3 endpoint. Provides a seamless bridge between on-premises data and AWS S3 buckets. Applications can interact with the device using standard S3 REST APIs. Best choice for developers and teams with existing S3-based workflows.
+
+•	S3-Compatible Storage:
+Turns the Snowball Edge into a durable, scalable object store. Can run in single-device mode or multi-device clusters for higher capacity. Allows applications to write and read large datasets locally without internet dependency. Best for large-scale object storage needs and workloads requiring offline scalability
+
+•	NFS Transfer
+Uses Network File System (NFS) protocol, enabling drag-and-drop file transfers. Useful for lifting and shifting entire file systems, especially in enterprise environments
